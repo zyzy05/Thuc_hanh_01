@@ -1,167 +1,204 @@
-BAI THUC HANH PYTHON MQTT
+# THỰC HÀNH 01: LẬP TRÌNH PYTHON VỚI GIAO THỨC MQTT
 
-=========================
+## 1. Giới thiệu
 
+Bài thực hành giúp sinh viên làm quen với giao thức MQTT (Message Queuing Telemetry Transport) và mô hình giao tiếp Publisher/Subscriber trong các hệ thống IoT.
 
+Trong bài này, Python được sử dụng để xây dựng hai chương trình:
 
-1. GIOI THIEU
+* **Publisher:** Kết nối tới MQTT Broker và gửi thông điệp lên một topic.
+* **Subscriber:** Đăng ký lắng nghe topic, nhận thông điệp và hiển thị nội dung cùng thời điểm nhận.
 
-Du an gom 3 bai thuc hanh lap trinh Python voi giao thuc MQTT:
+## 2. Mục tiêu
 
-- Bai 1: Gui va nhan thong diep MQTT.
+Sau khi hoàn thành bài thực hành, sinh viên có thể:
 
-- Bai 2: Mo phong cam bien nhiet do va do am.
+* Hiểu cách một ứng dụng Python kết nối tới MQTT Broker.
+* Biết cách gửi và nhận thông điệp bằng MQTT.
+* Hiểu vai trò của Publisher, Subscriber, Broker, Topic và Payload.
+* Biết cách sử dụng thư viện `paho-mqtt` trong Python.
+* Vận dụng MQTT để mô phỏng giao tiếp giữa các thiết bị IoT.
 
-- Bai 3: Dieu khien den thong minh qua MQTT.
+## 3. Môi trường thực hành
 
+* Ngôn ngữ lập trình: Python 3.x
+* Thư viện: `paho-mqtt`
+* IDE: Visual Studio Code
+* MQTT Broker: `test.mosquitto.org`
+* Port: `1883`
+* Giao thức kết nối: MQTT qua TCP
 
+### Cài đặt thư viện
 
-2. MOI TRUONG
+Mở Terminal tại thư mục dự án và chạy lệnh:
 
-- Python 3.x
+```bash
+python -m pip install paho-mqtt
+```
 
-- Thu vien paho-mqtt
+Có thể kiểm tra thư viện đã được cài đặt bằng lệnh:
 
-- IDE: Visual Studio Code
+```bash
+python -m pip show paho-mqtt
+```
 
-- MQTT Broker: test.mosquitto.org
+## 4. Cấu trúc chương trình
 
-- Port: 1883
+```text
+python-mqtt-lab/
+├── publisher_bai1.py
+├── subscriber_bai1.py
+├── sensor_publisher_bai2.py
+├── monitor_subscriber_bai2.py
+├── device_bai3.py
+├── controller_bai3.py
+├── requirements.txt
+└── README.md
+```
 
-- Giao thuc: MQTT TCP (khong TLS)
+Trong phạm vi thực hành 01, hai file được sử dụng là:
 
+* `publisher_bai1.py`: Chương trình gửi thông điệp MQTT.
+* `subscriber_bai1.py`: Chương trình nhận thông điệp MQTT.
 
+## 5. Cấu hình MQTT Broker
 
-3. CAI DAT
+Các thông số kết nối được khai báo trong hai chương trình:
 
-Mo Terminal tai thu muc du an va chay:
+| Thông số | Giá trị              |
+| -------- | -------------------- |
+| Broker   | `test.mosquitto.org` |
+| Port     | `1883`               |
+| Topic    | `iot/lab/message`    |
+| Username | Không yêu cầu        |
+| Password | Không yêu cầu        |
 
-python -m pip install -r requirements.txt
+Đây là broker công khai phục vụ mục đích thử nghiệm. Cần có kết nối Internet để sử dụng. Không gửi dữ liệu cá nhân hoặc thông tin nhạy cảm qua broker này.
 
+## 6. Nội dung thực hành
 
+### 6.1. Chương trình Publisher
 
-Neu dung python3:
+File: `publisher_bai1.py`
 
-python3 -m pip install -r requirements.txt
+Chức năng:
 
+1. Kết nối tới MQTT Broker.
+2. Nhập họ tên và mã sinh viên.
+3. Nhập nội dung thông điệp cần gửi.
+4. Publish thông điệp lên topic `iot/lab/message`.
+5. Cho phép gửi nhiều thông điệp liên tiếp.
+6. Nhập `EXIT` để kết thúc chương trình.
 
+Payload được gửi có dạng:
 
-4. CHAY BAI 1
+```text
+Xin chao tu client Python MQTT - B23DCCN001 - Nguyen Van A
+```
 
-Mo hai Terminal.
+Trong đó, mã sinh viên và họ tên cần được thay bằng thông tin thực tế của người thực hiện.
 
+### 6.2. Chương trình Subscriber
 
+File: `subscriber_bai1.py`
 
-Terminal 1:
+Chức năng:
 
+1. Kết nối tới cùng MQTT Broker.
+2. Subscribe topic `iot/lab/message`.
+3. Chờ nhận thông điệp từ Publisher.
+4. Hiển thị topic, nội dung và thời điểm nhận thông điệp.
+5. Tiếp tục chạy cho đến khi người dùng nhấn `Ctrl + C`.
+
+## 7. Hướng dẫn chạy chương trình
+
+### Bước 1: Mở Terminal thứ nhất
+
+Trong Visual Studio Code, chọn **Terminal → New Terminal**.
+
+Chạy Subscriber trước:
+
+```bash
 python subscriber_bai1.py
+```
 
+Khi kết nối thành công, chương trình sẽ thông báo đang lắng nghe topic `iot/lab/message`.
 
+### Bước 2: Mở Terminal thứ hai
 
-Terminal 2:
+Chọn dấu `+` trong khu vực Terminal để mở một Terminal mới.
 
+Chạy Publisher:
+
+```bash
 python publisher_bai1.py
+```
 
+### Bước 3: Nhập thông tin và gửi thông điệp
 
+Ví dụ:
 
-Publisher gui thong diep len topic iot/lab/message.
+```text
+Nhap ho ten: Nguyen Van A
+Nhap ma sinh vien: B23DCCN001
+Nhap loi chao (EXIT de thoat): Xin chao tu client Python MQTT
+```
 
-Subscriber hien thi topic, payload va thoi diem nhan.
+### Bước 4: Kiểm tra kết quả
 
-Nhap EXIT trong Publisher de ket thuc; Ctrl+C de dung Subscriber.
+Nếu kết nối và truyền dữ liệu thành công, Subscriber sẽ hiển thị thông tin tương tự:
 
+```text
+Nhan duoc message:
+Topic: iot/lab/message
+Payload: Xin chao tu client Python MQTT - B23DCCN001 - Nguyen Van A
+Time: 10:15:20
+```
 
+Thời điểm nhận thực tế phụ thuộc vào thời gian chạy chương trình.
 
-5. CHAY BAI 2
+### Bước 5: Kết thúc chương trình
 
-Mo hai Terminal.
+* Publisher: Nhập `EXIT`.
+* Subscriber: Nhấn `Ctrl + C`.
 
+## 8. Kết quả đạt được
 
+Sau khi hoàn thành bài thực hành:
 
-Terminal 1:
+* Publisher kết nối được với MQTT Broker.
+* Publisher gửi thông điệp lên đúng topic `iot/lab/message`.
+* Subscriber đăng ký topic và nhận được thông điệp.
+* Subscriber hiển thị được topic, payload và thời điểm nhận.
+* Hai chương trình giao tiếp được với nhau thông qua MQTT Broker.
 
-python monitor_subscriber_bai2.py
+## 9. Một số lỗi thường gặp
 
+### Lỗi chưa cài thư viện
 
+Thông báo:
 
-Terminal 2:
+```text
+ModuleNotFoundError: No module named 'paho'
+```
 
-python sensor_publisher_bai2.py
+Cách khắc phục:
 
+```bash
+python -m pip install paho-mqtt
+```
 
+### Subscriber không nhận được thông điệp
 
-Sensor Publisher gui du lieu JSON moi 3 giay len topic:
+Kiểm tra:
 
-iot/lab/sensor01/data
+* Subscriber đã chạy trước Publisher chưa.
+* Topic trong hai chương trình có giống nhau không.
+* Hai chương trình có kết nối tới cùng Broker không.
+* Kết nối Internet có hoạt động không.
 
+Do sử dụng broker công khai, có thể có thông điệp từ những người dùng khác cùng sử dụng topic. Khi cần thử nghiệm riêng, nên thay topic bằng một tên riêng có thêm mã sinh viên và cập nhật đồng bộ ở cả Publisher lẫn Subscriber.
 
+## 10. Kết luận
 
-Monitoring Subscriber hien thi du lieu va canh bao khi:
-
-- Nhiet do > 35 do C
-
-- Do am < 40%
-
-
-
-6. CHAY BAI 3
-
-Mo hai Terminal.
-
-
-
-Terminal 1:
-
-python device_bai3.py
-
-
-
-Terminal 2:
-
-python controller_bai3.py
-
-
-
-Controller gui ON hoac OFF len topic:
-
-iot/lab/light01/cmd
-
-
-
-Thiet bi cap nhat trang thai va gui JSON len topic:
-
-iot/lab/light01/status
-
-
-
-Nhap EXIT de ket thuc Controller.
-
-
-
-7. KET QUA MONG DOI
-
-- Bai 1: Publish va subscribe thong diep MQTT.
-
-- Bai 2: Gui/nhan JSON cam bien va hien thi canh bao theo nguong.
-
-- Bai 3: Dieu khien den va nhan phan hoi trang thai qua MQTT.
-
-
-
-8. LUU Y
-
-- Can co ket noi Internet de truy cap broker.
-
-- Broker cong khai chi dung cho muc dich hoc tap; khong gui du lieu rieng tu.
-
-- Hay chay chuong trinh nhan truoc chuong trinh gui.
-
-- Neu nhieu nguoi dung chung broker, co the nhan duoc thong diep tu nguoi khac.
-
-- Co the thay topic bang topic rieng co them ma sinh vien, nhung phai sua dong bo
-
-  topic o ca chuong trinh publish va subscribe.
-
-- Neu gap loi CallbackAPIVersion, cap nhat bang:
-
-  python -m pip install --upgrade paho-mqtt
+Bài thực hành 01 giúp sinh viên hiểu và triển khai được mô hình Publisher/Subscriber bằng Python với giao thức MQTT. Đây là kiến thức nền tảng để tiếp tục thực hiện các bài thực hành về mô phỏng cảm biến và điều khiển thiết bị IoT.
